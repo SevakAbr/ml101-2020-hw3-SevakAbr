@@ -16,7 +16,7 @@ class Perceptron:
     @staticmethod
     def _generate_initial_weights(dims):
         # FIXME: Fill with random initial values
-        return np.ones(dims)
+        return np.random.rand(dims)
 
     def fit(self, data, labels):
         """Fit the model and fix weight vector
@@ -30,7 +30,7 @@ class Perceptron:
             print(f"epoch N{num_epoch}:", end='\r', flush=True)
             # FIXME: Won't work correctly for windows, sorry :/
             for dw in stochastic_gradient_descent(
-                    data, labels, self._gradloss):
+                    data, labels, self.gradloss):
                 self.w -= dw
                 yield self.w
 
@@ -56,7 +56,9 @@ class Perceptron:
         >>> model._loss(np.array([0]), -1) # the boundary
         0
         """
-        raise NotImplementedError()
+        pred = vec.dot(self.w)
+        return max(0, -pred * label)
+        # raise NotImplementedError()
     
     def loss(self, data, labels):
         return sum(self._loss(vec, label)
@@ -66,15 +68,16 @@ class Perceptron:
         """Calculate the gradient of _loss on single data point
         >>> model = Perceptron(2)
         >>> model.w = np.array([1, 2])
-        >>> model._gradloss(np.array([2, 1]), 1)
-        array([0, 0])
-        >>> model._gradloss(np.array([2, 1]), -1)
-        array([-2, -1])
+        >>> np.all(model._gradloss(np.array([2, 1]), 1) == np.array([0, 0]))
+        True
+        >>> np.all(model._gradloss(np.array([2, 1]), -1) == np.array([-2, -1]))
+        True
         """
-        raise NotImplementedError()
+        return self._loss(vec, label) and label * vec
+        # raise NotImplementedError()
     
     def gradloss(self, data, labels):
-        return sum(self._gradloss(vec, label)
+        return -sum(self._gradloss(vec, label)
                    for vec, label in zip(data, labels))
 
     def predict(self, data):
@@ -85,7 +88,9 @@ class Perceptron:
                  where return_i denotes data_i's class
         >>> model = Perceptron(2)
         >>> model.w = np.array([1, 2])
-        >>> model.predict(np.array([[2, 1], [1, 0], [0, -1]]))
-        array([1, 1, -1])
+        >>> np.all(model.predict(np.array([[2, 1], [1, 0], [0, -1]])) ==
+        ...        np.array([1, 1, -1]))
+        True
         """
-        raise NotImplementedError()
+        return np.sign(data.dot(self.w)) | 1
+        # raise NotImplementedError()

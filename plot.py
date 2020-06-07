@@ -37,7 +37,7 @@ def parse_args(*argument_array):
     if args.learning_rate is not None:
         args.update_params['learning_rate'] = args.learning_rate
     if args.batch_size is not None:
-        args.update_method['batch_size'] = args.batch_size
+        args.update_params['batch_size'] = args.batch_size
     return args
 
 def getline(x1, y1, x2, y2, x):
@@ -104,7 +104,8 @@ def main(args):
         losses.append(model.loss(data, labels))
         plotw(ln, w, [lminx - 1, lmaxx + 1], [lminy - 1, lmaxy + 1])
         fig.canvas.draw()
-        time.sleep(args.sleep_time)
+        plt.pause(args.sleep_time)
+        # time.sleep(args.sleep_time)
         if args.model is LogisticRegression:
             xs = np.linspace(lminx - 1, lmaxx + 1, 100)
             ys = np.linspace(lminx - 1, lmaxx + 1, 100)

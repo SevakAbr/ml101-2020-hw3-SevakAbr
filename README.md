@@ -29,7 +29,7 @@ Calculates the hessian matrix of loss function respect to model's weights. It is
 
 #### calculate_probabilities
 
-You should calculate $P(C_1 | \phi)$ for $\phi$ vectors in the given data.
+You should calculate <img src="https://render.githubusercontent.com/render/math?math=P(C_1 | \phi)"> for <img src="https://render.githubusercontent.com/render/math?math=\phi"> vectors in the given data.
 
 #### predict
 
@@ -38,6 +38,7 @@ You should return the predicted classes: 0 or 1. Most probably you should use ca
 ### Gradient Descent
 
 You should implement stochastic, minibatch, batch gradient descents. You might want to shuffle data first for stochastic and minibatch gradient descents. Batch gradient descent fucntion should yield the gradient only once. So should do Newton Raphson method's function(Already implemented).
+Note, that gradient descent function should yield updates, not weight vectors. So after gradient descent yields $u$, the model should update weights like $w^{(new)} = w^{(old)} - u$.
 
 ### Perceptron (Optional)
 

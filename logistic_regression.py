@@ -29,7 +29,7 @@ class LogisticRegression:
     @staticmethod
     def _generate_initial_weights(dims):
         # FIXME: Fill with random initial values
-        return np.ones(dims)
+        return np.random.rand(dims)
     
     @staticmethod
     def sigmoid(x):
@@ -57,7 +57,9 @@ class LogisticRegression:
         :param data: [N, dims] dimensional numpy array of datapoints
         :param labels: [N] dimensional array of 1s and 0s
         """
-        raise NotImplementedError()
+        sigm = self.sigmoid(data.dot(self.w))
+        return -labels.dot(np.log(sigm)) - (1 - labels).dot(np.log(1 - sigm))
+        # raise NotImplementedError()
 
     def gradloss(self, data, labels):
         """Calculate the gradient of loss
@@ -65,41 +67,50 @@ class LogisticRegression:
         :param data: [N, dims] dimensional numpy array of datapoints
         :param labels: [N] dimensional array of 1s and 0s
         """
-        raise NotImplementedError
+        sigm = self.sigmoid(data.dot(self.w))
+        return -(labels - sigm).dot(data)
+        # raise NotImplementedError
     
     def hessianloss(self, data, labels):
         """Calculate the Hessian matrix of loss
         :param data: [N, dims] dimensional numpy array of datapoints
         :param labels: [N] dimensional array of 1s and 0s
         """
-        raise NotImplementedError()
+        sigm = self.sigmoid(data.dot(self.w))
+        return ((sigm * (1 - sigm)).reshape(-1, 1) * data).T.dot(data)
+        # raise NotImplementedError()
 
     def calculate_probabilities(self, data):
-        """Calculate labels for each datapoing of the given data
+        """Calculate probabilities for each datapoint of the given data
+           of being from the first class
 
         :param data: [N X dims] dimensional numpy array to predict classes
-        :return: numpy array of 1s and -1s,
+        :return: numpy array of probabilities,
                  where return_i denotes data_i's class
         >>> model = LogisticRegression(2)
         >>> model.w = np.array([1, 2])
-        >>> model.predict(np.array([[-2, 1]]))
-        array([0.5])
-        >>> (model.predict(np.array([[2, 0]]))
-        ...  == model.predict(np.array([[0, 1]])))
+        >>> np.all(model.calculate_probabilities(np.array([[-2, 1]]))
+        ...        == np.array([0.5]))
+        True
+        >>> np.all(model.calculate_probabilities(np.array([[2, 0]]))
+        ...        == model.calculate_probabilities(np.array([[0, 1]])))
         True
         """
-        raise NotImplementedError()
+        return self.sigmoid(data.dot(self.w))
+        # raise NotImplementedError()
 
     def predict(self, data):
-        """Calculate labels for each datapoing of the given data
+        """Calculate labels for each datapoint of the given data
 
         :param data: [N X dims] dimensional numpy array to predict classes
         :return: numpy array of 1s and -1s,
                  where return_i denotes data_i's class
         >>> model = LogisticRegression(2)
         >>> model.w = np.array([1, 2])
-        >>> model.predict(np.array([[2, 1], [1, 0], [0, -1]]))
-        array([1, 1, 0])
+        >>> np.all(model.predict(np.array([[2, 1], [1, 0], [0, -1]]))
+        ...        == np.array([1, 1, 0]))
+        True
         """
-        raise NotImplementedError()
+        return self.calculate_probabilities(data) >= 0.5
+        # raise NotImplementedError()
 
