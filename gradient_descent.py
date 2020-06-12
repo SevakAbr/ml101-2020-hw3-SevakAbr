@@ -17,8 +17,9 @@ def stochastic_gradient_descent(data, labels, gradloss,
     idxs = np.arange(data.shape[0])
     np.random.shuffle(idxs)
     for idx in idxs:
+        # idx is scalar, so data[idx].shape == (data.shape[1], ) (array)
+        # and data[[idx]].shape == (1, data.shape[1]) (matrix)
         yield learning_rate * gradloss(data[[idx]], labels[[idx]])
-        # yield np.arange(data.shape[1])
 
 
 def minibatch_gradient_descent(data, labels, gradloss,
@@ -44,12 +45,6 @@ def minibatch_gradient_descent(data, labels, gradloss,
         right = min(batch_size, len(idxs))
         yield learning_rate * gradloss(data[idxs[0:right]], labels[idxs[0:right]])
         idxs = idxs[right:]
-
-    # for idx in np.arange((data.shape[0] batch_size - 1) // batch_size):
-    #     left = idx * batch_size
-    #     right = min((idx + 1) * batch_size, data.shape[0])
-    #     yield learning_rate * gradloss(data[left: right])
-    #     # yield np.ones(data.shape[1])
 
 
 def batch_gradient_descent(data, labels, gradloss,
@@ -83,5 +78,4 @@ def newton_raphson_method(data, labels, gradloss, hessianloss):
     """
     gradient = gradloss(data, labels)
     hessian = hessianloss(data, labels)
-    # print('Newton:', gradient.shape, hessian.shape)
     yield np.linalg.inv(hessian) @ gradient

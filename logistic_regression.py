@@ -59,7 +59,6 @@ class LogisticRegression:
         """
         sigm = self.sigmoid(data.dot(self.w))
         return -labels.dot(np.log(sigm)) - (1 - labels).dot(np.log(1 - sigm))
-        # raise NotImplementedError()
 
     def gradloss(self, data, labels):
         """Calculate the gradient of loss
@@ -69,7 +68,6 @@ class LogisticRegression:
         """
         sigm = self.sigmoid(data.dot(self.w))
         return -(labels - sigm).dot(data)
-        # raise NotImplementedError
     
     def hessianloss(self, data, labels):
         """Calculate the Hessian matrix of loss
@@ -78,7 +76,6 @@ class LogisticRegression:
         """
         sigm = self.sigmoid(data.dot(self.w))
         return ((sigm * (1 - sigm)).reshape(-1, 1) * data).T.dot(data)
-        # raise NotImplementedError()
 
     def calculate_probabilities(self, data):
         """Calculate probabilities for each datapoint of the given data
@@ -97,7 +94,6 @@ class LogisticRegression:
         True
         """
         return self.sigmoid(data.dot(self.w))
-        # raise NotImplementedError()
 
     def predict(self, data):
         """Calculate labels for each datapoint of the given data
@@ -112,5 +108,4 @@ class LogisticRegression:
         True
         """
         return self.calculate_probabilities(data) >= 0.5
-        # raise NotImplementedError()
 

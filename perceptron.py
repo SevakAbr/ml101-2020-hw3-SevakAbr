@@ -58,7 +58,6 @@ class Perceptron:
         """
         pred = vec.dot(self.w)
         return max(0, -pred * label)
-        # raise NotImplementedError()
     
     def loss(self, data, labels):
         return sum(self._loss(vec, label)
@@ -73,8 +72,10 @@ class Perceptron:
         >>> np.all(model._gradloss(np.array([2, 1]), -1) == np.array([-2, -1]))
         True
         """
-        return self._loss(vec, label) and label * vec
-        # raise NotImplementedError()
+        if self._loss(vec, label) != 0:
+            return label * vec
+        else:
+            return 0
     
     def gradloss(self, data, labels):
         return -sum(self._gradloss(vec, label)
@@ -92,5 +93,7 @@ class Perceptron:
         ...        np.array([1, 1, -1]))
         True
         """
-        return np.sign(data.dot(self.w)) | 1
-        # raise NotImplementedError()
+        pred = data.dot(self.w)
+        pred[pred >= 0] = 1
+        pred[pred < 0] = -1
+        return pred
